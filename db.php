@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 $host = "localhost";
 $username = "root";
-$password = "";
+$password = "0000";
 $database = "project_db_advance";
 
 $conn = mysqli_connect($host, $username, $password);
@@ -156,4 +156,5 @@ function close_connection() {
     global $conn;
     mysqli_close($conn);
 }
+
 ?>
