@@ -1,21 +1,28 @@
 <?php
-// db.php - الملف الأساسي للاتصال
+
+// db.php - الملف الأساسي للاتصال (نسخة السحابة)
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
-$host = "localhost";
-$username = "root";
-$password = "0000";
-$database = "project_db_advance";
+// ========== بيانات الاتصال بالسحابة ==========
+// استخدم البيانات التي حصلت عليها من FreeSQLDatabase
+$host = "localhost";  // غيّر هذا إلى الرابط الصحيح
+$username = "root";                // غيّر هذا إلى اسم المستخدم الصحيح
+$password = "0000";                    // غيّر هذا إلى كلمة المرور الصحيحة
+$database = "project_db_advance";                  // غيّر هذا إلى اسم قاعدة البيانات الصحيح
+$port = 3306;                               // المنفذ ثابت
 
-$conn = mysqli_connect($host, $username, $password);
+// محاولة الاتصال مع معالجة الأخطاء
+$conn = mysqli_connect($host, $username, $password, $database, $port);
 
 if (!$conn) {
-    die("فشل الاتصال بقاعدة البيانات: " . mysqli_connect_error());
+    die("فشل الاتصال بقاعدة البيانات: " . mysqli_connect_error() . 
+        "<br>الرجاء التأكد من بيانات الاتصال");
 }
 
-// إنشاء القاعدة والجدول تلقائياً إذا لم يوجدا
-mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS $database CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-mysqli_select_db($conn, $database);
+// تعيين الترميز للغة العربية
+mysqli_set_charset($conn, "utf8mb4");
+
+// ========== إنشاء الجداول إذا لم تكن موجودة ==========
 
 // جدول الميزانيات
 $table_sql = "CREATE TABLE IF NOT EXISTS budgets (
@@ -55,20 +62,25 @@ mysqli_query($conn, $members_table);
 
 // إضافة بيانات تجريبية للأعضاء إذا كان الجدول فارغاً
 $check_members = mysqli_query($conn, "SELECT COUNT(*) as count FROM members");
-$member_count = mysqli_fetch_assoc($check_members);
-if ($member_count['count'] == 0) {
-    mysqli_query($conn, "INSERT INTO members (full_name, email, phone, position, department, role, salary, hire_date, status) VALUES 
-    ('أحمد محمد', 'ahmed@example.com', '0501234567', 'مدير الميزانية', 'المالية', 'admin', 25000, '2023-01-15', 'active'),
-    ('سارة خالد', 'sara@example.com', '0507654321', 'محلل مالي', 'المالية', 'manager', 18000, '2023-03-10', 'active'),
-    ('محمد علي', 'mohammed@example.com', '0501112233', 'مشرف مشاريع', 'المشاريع', 'member', 15000, '2023-05-20', 'active'),
-    ('فاطمة عبدالله', 'fatima@example.com', '0504445566', 'مصممة واجهات', 'التصميم', 'member', 12000, '2023-07-05', 'active')
-    ");
+if ($check_members) {
+    $member_count = mysqli_fetch_assoc($check_members);
+    if ($member_count['count'] == 0) {
+        mysqli_query($conn, "INSERT INTO members (full_name, email, phone, position, department, role, salary, hire_date, status) VALUES 
+        ('أحمد محمد', 'ahmed@example.com', '0501234567', 'مدير الميزانية', 'المالية', 'admin', 25000, '2023-01-15', 'active'),
+        ('سارة خالد', 'sara@example.com', '0507654321', 'محلل مالي', 'المالية', 'manager', 18000, '2023-03-10', 'active'),
+        ('محمد علي', 'mohammed@example.com', '0501112233', 'مشرف مشاريع', 'المشاريع', 'member', 15000, '2023-05-20', 'active'),
+        ('فاطمة عبدالله', 'fatima@example.com', '0504445566', 'مصممة واجهات', 'التصميم', 'member', 12000, '2023-07-05', 'active')
+        ");
+    }
 }
+
+// ========== دوال الأعضاء ==========
 
 // دالة جلب جميع الأعضاء
 function get_all_members() {
     global $conn;
-    return mysqli_query($conn, "SELECT * FROM members ORDER BY created_at DESC");
+    $result = mysqli_query($conn, "SELECT * FROM members ORDER BY created_at DESC");
+    return $result ? $result : false;
 }
 
 // دالة جلب عضو محدد
@@ -76,7 +88,7 @@ function get_member_by_id($id) {
     global $conn;
     $id = intval($id);
     $result = mysqli_query($conn, "SELECT * FROM members WHERE id = $id");
-    return mysqli_fetch_assoc($result);
+    return $result ? mysqli_fetch_assoc($result) : null;
 }
 
 // دالة إضافة عضو جديد
@@ -140,10 +152,11 @@ function delete_member($id) {
     return mysqli_query($conn, "DELETE FROM members WHERE id = $id");
 }
 
-// الدوال القديمة للميزانيات
+// ========== دوال الميزانيات ==========
 function get_all_budgets() {
     global $conn;
-    return mysqli_query($conn, "SELECT * FROM budgets ORDER BY created_at DESC");
+    $result = mysqli_query($conn, "SELECT * FROM budgets ORDER BY created_at DESC");
+    return $result ? $result : false;
 }
 
 function delete_budget($id) {
@@ -157,4 +170,11 @@ function close_connection() {
     mysqli_close($conn);
 }
 
+// اختبار الاتصال (يمكنك إزالة هذه الأسطر بعد التأكد من العمل)
+$test_query = mysqli_query($conn, "SELECT 1");
+if ($test_query) {
+    error_log("✅ db.php: الاتصال بقاعدة البيانات ناجح");
+} else {
+    error_log("❌ db.php: فشل الاتصال بقاعدة البيانات");
+}
 ?>
