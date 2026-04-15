@@ -7,7 +7,7 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
 // استخدم البيانات التي حصلت عليها من FreeSQLDatabase
 $host = "localhost";  // غيّر هذا إلى الرابط الصحيح
 $username = "root";                // غيّر هذا إلى اسم المستخدم الصحيح
-$password = "0000";                    // غيّر هذا إلى كلمة المرور الصحيحة
+$password = "moh0000";                    // غيّر هذا إلى كلمة المرور الصحيحة
 $database = "project_db_advance";                  // غيّر هذا إلى اسم قاعدة البيانات الصحيح
 $port = 3306;                               // المنفذ ثابت
 
