@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
 $host = "localhost";  // غيّر هذا إلى الرابط الصحيح
 $username = "root";                // غيّر هذا إلى اسم المستخدم الصحيح
 $password = "moh0000";                    // غيّر هذا إلى كلمة المرور الصحيحة
-$database = "project_db_advance";                  // غيّر هذا إلى اسم قاعدة البيانات الصحيح
+$database = "budget_db";                  // غيّر هذا إلى اسم قاعدة البيانات الصحيح
 $port = 3306;                               // المنفذ ثابت
 
 // محاولة الاتصال مع معالجة الأخطاء
