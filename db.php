@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 // ========== بيانات الاتصال بالسحابة ==========
 // استخدم البيانات التي حصلت عليها من FreeSQLDatabase
-$host = "127.0.0.1";
+$host = "localhost";
 $username = "root";
 $password = "";
 $database = "budget_db";                 // غيّر هذا إلى اسم قاعدة البيانات الصحيح
