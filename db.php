@@ -12,7 +12,7 @@ $database = "budget_db";                 // غيّر هذا إلى اسم قاع
 $port = 3306;                               // المنفذ ثابت
 
 // محاولة الاتصال مع معالجة الأخطاء
-$conn = mysqli_connect($host, $username, $password, $database, $port);
+///$conn = mysqli_connect($host, $username, $password, $database, $port);
 
 if (!$conn) {
     die("فشل الاتصال بقاعدة البيانات: " . mysqli_connect_error() . 
