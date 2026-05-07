@@ -16,7 +16,7 @@ if ($row['count'] == 0) {
     VALUES ('Marketing Campaign', 'حملة تسويقية ربع سنوية', 150000, 135000, '2024-03-01', '2024-06-30', 90, 'completed', 'Digital Marketing, Social Media, SEO')");
 }
 
-// رسائل النجاح والخطأ
+أ
 $success_msg = '';
 $error_msg = '';
 
