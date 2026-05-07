@@ -1,17 +1,17 @@
 <?php
 
-// db.php - الملف الأساسي للاتصال (نسخة السحابة)
+
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
-// ========== بيانات الاتصال بالسحابة ==========
-// استخدم البيانات التي حصلت عليها من FreeSQLDatabase
+
+
 $host = "localhost";
 $username = "root";
 $password = "";
-$database = "budget_db";                 // غيّر هذا إلى اسم قاعدة البيانات الصحيح
-$port = 3306;                               // المنفذ ثابت
+$database = "budget_db";              
+$port = 3306;                               
 
-// محاولة الاتصال مع معالجة الأخطاء
+
 ///$conn = mysqli_connect($host, $username, $password, $database, $port);
 
 if (!$conn) {
@@ -19,12 +19,11 @@ if (!$conn) {
         "<br>الرجاء التأكد من بيانات الاتصال");
 }
 
-// تعيين الترميز للغة العربية
+
 mysqli_set_charset($conn, "utf8mb4");
 
-// ========== إنشاء الجداول إذا لم تكن موجودة ==========
 
-// جدول الميزانيات
+
 $table_sql = "CREATE TABLE IF NOT EXISTS budgets (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -41,7 +40,7 @@ $table_sql = "CREATE TABLE IF NOT EXISTS budgets (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 mysqli_query($conn, $table_sql);
 
-// جدول الأعضاء
+
 $members_table = "CREATE TABLE IF NOT EXISTS members (
     id INT AUTO_INCREMENT PRIMARY KEY,
     full_name VARCHAR(255) NOT NULL,
@@ -60,30 +59,28 @@ $members_table = "CREATE TABLE IF NOT EXISTS members (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 mysqli_query($conn, $members_table);
 
-// إضافة بيانات تجريبية للأعضاء إذا كان الجدول فارغاً
+
 $check_members = mysqli_query($conn, "SELECT COUNT(*) as count FROM members");
 if ($check_members) {
     $member_count = mysqli_fetch_assoc($check_members);
     if ($member_count['count'] == 0) {
         mysqli_query($conn, "INSERT INTO members (full_name, email, phone, position, department, role, salary, hire_date, status) VALUES 
-        ('أحمد محمد', 'ahmed@example.com', '0501234567', 'مدير الميزانية', 'المالية', 'admin', 25000, '2023-01-15', 'active'),
-        ('سارة خالد', 'sara@example.com', '0507654321', 'محلل مالي', 'المالية', 'manager', 18000, '2023-03-10', 'active'),
-        ('محمد علي', 'mohammed@example.com', '0501112233', 'مشرف مشاريع', 'المشاريع', 'member', 15000, '2023-05-20', 'active'),
-        ('فاطمة عبدالله', 'fatima@example.com', '0504445566', 'مصممة واجهات', 'التصميم', 'member', 12000, '2023-07-05', 'active')
+        ('Ahmad', 'ahmed@example.com', '0501234567', 'مدير الميزانية', 'المالية', 'admin', 25000, '2023-01-15', 'active'),
+        ('sara', 'sara@example.com', '0507654321', 'محلل مالي', 'المالية', 'manager', 18000, '2023-03-10', 'active'),
+        ('mohammad', 'mohammed@example.com', '0501112233', 'مشرف مشاريع', 'المشاريع', 'member', 15000, '2023-05-20', 'active'),
+        ('fatma', 'fatima@example.com', '0504445566', 'مصممة واجهات', 'التصميم', 'member', 12000, '2023-07-05', 'active')
         ");
     }
 }
 
-// ========== دوال الأعضاء ==========
 
-// دالة جلب جميع الأعضاء
+
 function get_all_members() {
     global $conn;
     $result = mysqli_query($conn, "SELECT * FROM members ORDER BY created_at DESC");
     return $result ? $result : false;
 }
 
-// دالة جلب عضو محدد
 function get_member_by_id($id) {
     global $conn;
     $id = intval($id);
@@ -91,7 +88,7 @@ function get_member_by_id($id) {
     return $result ? mysqli_fetch_assoc($result) : null;
 }
 
-// دالة إضافة عضو جديد
+
 function add_member($data) {
     global $conn;
     
@@ -145,14 +142,13 @@ function update_member($id, $data) {
     return mysqli_query($conn, $sql);
 }
 
-// دالة حذف عضو
+
 function delete_member($id) {
     global $conn;
     $id = intval($id);
     return mysqli_query($conn, "DELETE FROM members WHERE id = $id");
 }
 
-// ========== دوال الميزانيات ==========
 function get_all_budgets() {
     global $conn;
     $result = mysqli_query($conn, "SELECT * FROM budgets ORDER BY created_at DESC");
@@ -170,11 +166,10 @@ function close_connection() {
     mysqli_close($conn);
 }
 
-// اختبار الاتصال (يمكنك إزالة هذه الأسطر بعد التأكد من العمل)
 $test_query = mysqli_query($conn, "SELECT 1");
 if ($test_query) {
-    error_log("✅ db.php: الاتصال بقاعدة البيانات ناجح");
+    error_log(" db.php: الاتصال بقاعدة البيانات ناجح");
 } else {
-    error_log("❌ db.php: فشل الاتصال بقاعدة البيانات");
+    error_log(" db.php: فشل الاتصال بقاعدة البيانات");
 }
 ?>
