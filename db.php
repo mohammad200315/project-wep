@@ -62,16 +62,14 @@ $check_members = mysqli_query($conn, "SELECT COUNT(*) as count FROM members");
 if ($check_members) {
     $member_count = mysqli_fetch_assoc($check_members);
     if ($member_count['count'] == 0) {
-        mysqli_query($conn, "INSERT INTO members (full_name, email, phone, position, department, role, salary, hire_date, status) VALUES 
+     /*   mysqli_query($conn, "INSERT INTO members (full_name, email, phone, position, department, role, salary, hire_date, status) VALUES 
         ('Ahmad', 'ahmed@example.com', '0501234567', 'مدير الميزانية', 'المالية', 'admin', 25000, '2023-01-15', 'active'),
         ('sara', 'sara@example.com', '0507654321', 'محلل مالي', 'المالية', 'manager', 18000, '2023-03-10', 'active'),
         ('mohammad', 'mohammed@example.com', '0501112233', 'مشرف مشاريع', 'المشاريع', 'member', 15000, '2023-05-20', 'active'),
         ('fatma', 'fatima@example.com', '0504445566', 'مصممة واجهات', 'التصميم', 'member', 12000, '2023-07-05', 'active')
-        ");
+        ");*/
     }
 }
-
-
 
 function get_all_members() {
     global $conn;
@@ -107,7 +105,7 @@ function add_member($data) {
     return mysqli_query($conn, $sql);
 }
 
-// دالة تحديث بيانات عضو
+
 function update_member($id, $data) {
     global $conn;
     $id = intval($id);
