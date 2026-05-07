@@ -3,8 +3,6 @@
 
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
-
-
 $host = "localhost";
 $username = "root";
 $password = "";
@@ -12,7 +10,7 @@ $database = "budget_db";
 $port = 3306;                               
 
 
-///$conn = mysqli_connect($host, $username, $password, $database, $port);
+$conn = mysqli_connect($host, $username, $password, $database, $port);
 
 if (!$conn) {
     die("فشل الاتصال بقاعدة البيانات: " . mysqli_connect_error() . 
